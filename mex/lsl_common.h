@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include "mex.h"
 
 /* library handling */
