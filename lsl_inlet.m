@@ -16,7 +16,7 @@ classdef lsl_inlet < handle
     
     methods
         
-        function self = lsl_inlet(info, maxbuffered, chunksize, recover)
+        function self = lsl_inlet(info, maxbuffered, chunksize, recover, process)
             % Inlet = lsl_inlet(Streaminfo, MaxBuffered, ChunkSize, Recover)
             % Construct a new stream inlet from a resolved stream info.
             %
@@ -38,10 +38,12 @@ classdef lsl_inlet < handle
             %              In all other cases (recover is false or the stream is not recoverable) functions may throw a
             %              lost_error if the stream's source is lost (e.g., due to an app or computer crash).
             %             (default: 1)
+            %
+            
             
             if ~exist('maxbuffered','var') || isempty(maxbuffered) maxbuffered = 360; end
             if ~exist('chunksize','var') || isempty(chunksize) chunksize = 0; end
-            if ~exist('recover','var') || isempty(recover) recover = 1; end            
+            if ~exist('recover','var') || isempty(recover) recover = 1; end
             self.LibHandle = info.LibHandle;
             self.ChannelCount = info.channel_count();
             self.IsString = strcmp(info.channel_format(),'cf_string');
@@ -122,6 +124,25 @@ classdef lsl_inlet < handle
             
             if ~exist('timeout','var') || isempty(timeout) timeout = 60; end
             result = lsl_time_correction(self.LibHandle, self.InletHandle,timeout);
+        end
+        
+        function result = set_postprocessing(self, processing_flags)
+            % Set timestamp correction postprocessing flags. This should
+            % only be done in online scenarios. This option will destroy a
+            % stream's original, ground-truth timestamps.
+            % 
+            % In:
+            %   processing_flags :  
+            %             0 : no automatic post_processing
+            %             1 : perform automatic clock synchronization
+            %             2 : remove jitter from time stamps
+            %             4 : force time-stamps to be monotonically ascending (only makes sense if also dejittered)
+            %             8 : post-processing is threadsafe (same inlet can be read from by multiple threads)
+            %             15 : combination of all options
+            %             These options can be combined by adding them
+            %             (default: proc_none)
+            if ~exist('processing_flags','var') || isempty(processing_flags) processing_flags = 0; end
+            lsl_set_postprocessing(self.LibHandle, self.InletHandle, processing_flags);
         end
         
         

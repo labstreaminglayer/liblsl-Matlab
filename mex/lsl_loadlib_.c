@@ -109,6 +109,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	lsl_set_child_value_t lsl_set_child_value;
 	lsl_set_name_t lsl_set_name;
 	lsl_set_value_t lsl_set_value;
+    lsl_set_postprocessing_t lsl_set_postprocessing;
 	lsl_append_child_t lsl_append_child;
 	lsl_prepend_child_t lsl_prepend_child;
 	lsl_append_copy_t lsl_append_copy;
@@ -127,7 +128,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 		"lsl_pull_sample_i", "lsl_pull_sample_s", "lsl_pull_sample_c", "lsl_pull_sample_str", "lsl_pull_sample_buf", "lsl_pull_sample_v", "lsl_samples_available", "lsl_first_child", "lsl_last_child", "lsl_next_sibling", "lsl_previous_sibling", 
 		"lsl_parent", "lsl_child", "lsl_next_sibling_n", "lsl_previous_sibling_n", "lsl_empty", "lsl_is_text", "lsl_name", "lsl_value", "lsl_child_value", "lsl_child_value_n", "lsl_append_child_value", 
 		"lsl_prepend_child_value", "lsl_set_child_value", "lsl_set_name", "lsl_set_value", "lsl_append_child", "lsl_prepend_child", "lsl_append_copy", "lsl_prepend_copy", "lsl_remove_child_n", 
-		"lsl_remove_child"};
+		"lsl_remove_child", "lsl_set_postprocessing"};
 
 	mxArray *tmp;
 
@@ -240,6 +241,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	lsl_set_child_value = (lsl_set_child_value_t)LOAD_FUNCTION(hlib,"lsl_set_child_value");
 	lsl_set_name = (lsl_set_name_t)LOAD_FUNCTION(hlib,"lsl_set_name");
 	lsl_set_value = (lsl_set_value_t)LOAD_FUNCTION(hlib,"lsl_set_value");
+    lsl_set_postprocessing = (lsl_set_postprocessing_t)LOAD_FUNCTION(hlib,"lsl_set_postprocessing");
 	lsl_append_child = (lsl_append_child_t)LOAD_FUNCTION(hlib,"lsl_append_child");
 	lsl_prepend_child = (lsl_prepend_child_t)LOAD_FUNCTION(hlib,"lsl_prepend_child");
 	lsl_append_copy = (lsl_append_copy_t)LOAD_FUNCTION(hlib,"lsl_append_copy");
@@ -338,6 +340,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_set_child_value; mxSetField(plhs[0],0,"lsl_set_child_value",tmp);
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_set_name; mxSetField(plhs[0],0,"lsl_set_name",tmp);
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_set_value; mxSetField(plhs[0],0,"lsl_set_value",tmp);
+    tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_set_postprocessing; mxSetField(plhs[0],0,"lsl_set_postprocessing",tmp);
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_append_child; mxSetField(plhs[0],0,"lsl_append_child",tmp);
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_prepend_child; mxSetField(plhs[0],0,"lsl_prepend_child",tmp);
 	tmp = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(tmp) = (uintptr_t)lsl_append_copy; mxSetField(plhs[0],0,"lsl_append_copy",tmp);
