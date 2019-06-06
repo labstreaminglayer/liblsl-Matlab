@@ -42,6 +42,7 @@ typedef void* outlet;
 typedef void* inlet;
 typedef void* continuous_resolver;
 typedef void* xml_ptr;
+typedef void* processing_options_t;
         
 typedef enum {
 	cft_float32 = 1,
@@ -140,6 +141,7 @@ typedef double (LINKAGE *lsl_pull_sample_c_t)(inlet in, char *buffer, int buffer
 typedef double (LINKAGE *lsl_pull_sample_str_t)(inlet in, char **buffer, int buffer_elements, double timeout, int *ec);
 typedef double (LINKAGE *lsl_pull_sample_buf_t)(inlet in, char **buffer, unsigned *buffer_lengths, int buffer_elements, double timeout, int *ec);
 typedef double (LINKAGE *lsl_pull_sample_v_t)(inlet in, void *buffer, int buffer_bytes, double timeout, int *ec);
+typedef int (LINKAGE *lsl_set_postprocessing_t)(inlet in, int flags);
 typedef unsigned (LINKAGE *lsl_samples_available_t)(inlet in);
 
 /* xml ptr */
