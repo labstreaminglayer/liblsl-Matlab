@@ -118,7 +118,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	lsl_remove_child_t lsl_remove_child;
 
 	/* the same as list of strings... */
-	char *fieldnames[] = {"hlib","lsl_protocol_version", "lsl_library_version", "lsl_local_clock", "lsl_resolve_all", "lsl_resolve_byprop", "lsl_resolve_bypred", "lsl_create_streaminfo", "lsl_destroy_streaminfo", 
+	const char *fieldnames[] = {"hlib","lsl_protocol_version", "lsl_library_version", "lsl_local_clock", "lsl_resolve_all", "lsl_resolve_byprop", "lsl_resolve_bypred", "lsl_create_streaminfo", "lsl_destroy_streaminfo", 
 		"lsl_get_name", "lsl_get_type", "lsl_get_channel_count", "lsl_get_nominal_srate", "lsl_get_channel_format", "lsl_get_source_id", "lsl_get_version", "lsl_get_created_at",
 		"lsl_get_uid", "lsl_get_session_id", "lsl_get_hostname", "lsl_get_desc", "lsl_get_xml", "lsl_create_outlet", "lsl_destroy_outlet", "lsl_push_sample_f", "lsl_push_sample_ft", "lsl_push_sample_ftp", 
         "lsl_push_sample_d", "lsl_push_sample_dt" , "lsl_push_sample_dtp", "lsl_push_sample_l", "lsl_push_sample_lt", "lsl_push_sample_ltp",  "lsl_push_sample_i", "lsl_push_sample_it", 
