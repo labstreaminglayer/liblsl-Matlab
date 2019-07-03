@@ -108,8 +108,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	lsl_prepend_child_value_t lsl_prepend_child_value;
 	lsl_set_child_value_t lsl_set_child_value;
 	lsl_set_name_t lsl_set_name;
-	lsl_set_value_t lsl_set_value;
     lsl_set_postprocessing_t lsl_set_postprocessing;
+	lsl_set_value_t lsl_set_value;
 	lsl_append_child_t lsl_append_child;
 	lsl_prepend_child_t lsl_prepend_child;
 	lsl_append_copy_t lsl_append_copy;
@@ -240,8 +240,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[]) {
 	lsl_prepend_child_value = (lsl_prepend_child_value_t)LOAD_FUNCTION(hlib,"lsl_prepend_child_value");
 	lsl_set_child_value = (lsl_set_child_value_t)LOAD_FUNCTION(hlib,"lsl_set_child_value");
 	lsl_set_name = (lsl_set_name_t)LOAD_FUNCTION(hlib,"lsl_set_name");
-	lsl_set_value = (lsl_set_value_t)LOAD_FUNCTION(hlib,"lsl_set_value");
     lsl_set_postprocessing = (lsl_set_postprocessing_t)LOAD_FUNCTION(hlib,"lsl_set_postprocessing");
+	lsl_set_value = (lsl_set_value_t)LOAD_FUNCTION(hlib,"lsl_set_value");
 	lsl_append_child = (lsl_append_child_t)LOAD_FUNCTION(hlib,"lsl_append_child");
 	lsl_prepend_child = (lsl_prepend_child_t)LOAD_FUNCTION(hlib,"lsl_prepend_child");
 	lsl_append_copy = (lsl_append_copy_t)LOAD_FUNCTION(hlib,"lsl_append_copy");
