@@ -62,7 +62,13 @@ else
         error(['Apparently the file "' dllpath '" is missing on your computer. Cannot load the lab streaming layer.']); end
 
     % open the library and make sure that it gets auto-deleted when the handle is erased
-    hlib = lsl_loadlib_(dllpath);
+    try
+        hlib = lsl_loadlib_(dllpath);
+    catch e
+	disp('See https://github.com/labstreaminglayer/liblsl-Matlab/#troubleshooting for troubleshooting tips');
+        error(['Error loading the liblsl library: ', e.message]);
+    end
+
     hlib.on_cleanup = onCleanup(@()lsl_freelib_(hlib));
     
     if keep_persistent
