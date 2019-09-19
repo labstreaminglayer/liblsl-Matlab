@@ -32,4 +32,7 @@ for i = 1:length(files)
 		disp([base, ext, ' up to date']);
 	end
 end
+if ismac
+    system('install_name_tool -add_rpath "@loader_path/" lsl_loadlib_.mexmaci64')
+end
 cd('..');
