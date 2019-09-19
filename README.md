@@ -3,8 +3,10 @@ This is the MATLAB interface for liblsl.
 * You need to add this directory to your MATLAB path recursively
     * Using the MATLAB GUI, use File/Set Path...
     * Alternatively, in a script, use `addpath(genpath('path/to/liblsl-Matlab'));`
-* The bin/ directory needs to contain an up-to-date build of the library file for your MATLAB version.
-    * e.g. liblsl64.dll for 64-bit MATLAB on Windows.
+* The `bin/` directory needs to contain an up-to-date build of the library file for your MATLAB version.
+    * see [here](https://github.com/sccn/labstreaminglayer/blob/master/doc/BUILD.md#note-about-architectures--binaries) for more information which library you need
+    * download precompiled libraries from the [liblsl release page](https://github.com/sccn/liblsl/releases)
+    * e.g. `liblsl64.dll` for 64-bit MATLAB on Windows.
     * e.g. `liblsl64.dylib` and `liblsl64.1.4.0.dylib` for 64-bit MATLAB on MacOS.
     * e.g. `liblsl64.so` and `liblsl64.so.1.4.0` for 64-bit MATLAB in Linux
 * Once this taken care of, see the example files in the examples/ directory for how to use this interface in a MATLAB program.
