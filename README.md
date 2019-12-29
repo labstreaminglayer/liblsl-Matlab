@@ -1,5 +1,7 @@
 This is the MATLAB interface for liblsl.
 
+## Use
+
 * You need to add this directory to your MATLAB path recursively
     * Using the MATLAB GUI, use File/Set Path...
     * Alternatively, in a script, use `addpath(genpath('path/to/liblsl-Matlab'));`
@@ -10,6 +12,10 @@ This is the MATLAB interface for liblsl.
     * e.g. `liblsl64.dylib` and `liblsl64.1.4.0.dylib` for 64-bit MATLAB on MacOS.
     * e.g. `liblsl64.so` and `liblsl64.so.1.4.0` for 64-bit MATLAB in Linux
 * Once this taken care of, see the example files in the examples/ directory for how to use this interface in a MATLAB program.
+
+### Simulink
+
+[See here](https://bitbucket.org/neatlabs/simbsi/wiki/LSL%20signal%20acquisition%20example).
 
 ### Troubleshooting
 
