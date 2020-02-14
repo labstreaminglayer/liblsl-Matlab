@@ -24,51 +24,20 @@ function hlib = lsl_loadlib(binarypath,debugging,keep_persistent)
 %                                2012-03-05
 
 if ~exist('binarypath','var') || isempty(binarypath)
-    binarypath = [fileparts(mfilename('fullpath')) filesep 'bin']; end
+    binarypath = [];
+end
 if ~exist('debugging','var') || isempty(debugging)
-    debugging = false; end
+    debugging = false; 
+end
 if ~exist('keep_persistent','var') || isempty(keep_persistent)
-    keep_persistent = true; end
+    keep_persistent = true; 
+end
     
 persistent lib;
 if keep_persistent && ~isempty(lib)
     hlib = lib;
 else   
-    if ispc
-        ext = '.dll';
-    elseif ismac
-        ext = '.dylib';
-    elseif isunix
-        ext = '.so';
-    else
-        error('Your operating system is not supported by this version of the lab streaming layer API.');
-    end
-
-    if strfind(computer,'64')
-        bitness = '64';
-    else
-        bitness = '32';
-    end
-        
-    if debugging
-        debug = '-debug';
-    else
-        debug = '';
-    end
-    
-    dll_fname = sprintf('liblsl%s%s%s', bitness, debug, ext);
-    dllpath = fullfile(binarypath, dll_fname);
-
-    if ~exist(dllpath, 'file') && ~ispc
-        new_dllpath = fullfile('/usr/lib/', dll_fname);
-        if exist(new_dllpath, 'file')
-            dllpath = new_dllpath;
-        end %if
-    end %if
-    
-    if ~exist(dllpath,'file')
-        error(['Apparently the file "' dllpath '" is missing on your computer. Cannot load the lab streaming layer.']); 
-    end
+    dllpath = lsl_get_dll(binarypath, debugging);
 
     % open the library and make sure that it gets auto-deleted when the handle is erased
     try
