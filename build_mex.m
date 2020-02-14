@@ -15,7 +15,7 @@ end
 
 
 if isempty(dir(['bin/liblsl64.', dllext]))
-	error(['liblsl64.' dllext ' not found in bin/']);
+	%error(['liblsl64.' dllext ' not found in bin/']);
 end
 
 ext = ['.' mexext];

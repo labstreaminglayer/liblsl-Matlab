@@ -55,11 +55,20 @@ else
     else
         debug = '';
     end
+    
+    dll_fname = sprintf('liblsl%s%s%s', bitness, debug, ext);
+    dllpath = fullfile(binarypath, dll_fname);
 
-    dllpath = [binarypath filesep 'liblsl' bitness debug ext];
-
+    if ~exist(dllpath, 'file') && ~ispc
+        new_dllpath = fullfile('/usr/lib/', dll_fname);
+        if exist(new_dllpath, 'file')
+            dllpath = new_dllpath;
+        end %if
+    end %if
+    
     if ~exist(dllpath,'file')
-        error(['Apparently the file "' dllpath '" is missing on your computer. Cannot load the lab streaming layer.']); end
+        error(['Apparently the file "' dllpath '" is missing on your computer. Cannot load the lab streaming layer.']); 
+    end
 
     % open the library and make sure that it gets auto-deleted when the handle is erased
     try
