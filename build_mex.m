@@ -4,18 +4,13 @@
 % C compiler (mex -setup)
 
 libs = {'-llsl64'};
-if ispc
-	dllext = 'dll';
-elseif ismac
-	dllext = 'dylib';
-elseif isunix
-	dllext = 'so';
+if isunix
 	libs = {'-llsl64','-ldl'};
 end
 
 
-if isempty(dir(['bin/liblsl64.', dllext]))
-	%error(['liblsl64.' dllext ' not found in bin/']);
+if ispc && isempty(dir('bin/liblsl64.lib'))
+	error('liblsl64.lib not found in bin/');
 end
 
 ext = ['.' mexext];
