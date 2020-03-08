@@ -12,7 +12,7 @@ function lsl_fname = lsl_get_dll(binarypath, debugging)
 %   lsl_fname : the filename of the library
 
 if ~exist('binarypath','var') || isempty(binarypath)
-    binarypath = [fileparts(mfilename('fullpath')) filesep 'bin'];
+    binarypath = fullfile(fileparts(mfilename('fullpath')), 'bin');
 end
 if ~exist('debugging','var') || isempty(debugging)
     debugging = false;
@@ -28,7 +28,7 @@ else
     error('Your operating system is not supported by this version of the lab streaming layer API.');
 end
 
-if strfind(computer,'64')
+if contains(computer,'64')
     bitness = '64';
 else
     bitness = '32';
@@ -40,18 +40,56 @@ else
     debug = '';
 end
 
-dll_fname = sprintf('liblsl%s%s%s', bitness, debug, ext);
-lsl_fname = fullfile(binarypath, dll_fname);
+so_fname = sprintf('liblsl%s%s%s', bitness, debug, ext);
+lsl_fname = fullfile(binarypath, so_fname);
 
-if ~exist(lsl_fname, 'file') && ~ispc
-    new_dllpath = fullfile('/usr/lib/', dll_fname);
-    if exist(new_dllpath, 'file')
-        lsl_fname = new_dllpath;
+if ~exist(lsl_fname, 'file')
+    if ispc
+        % On Windows, also try simply 'lsl.dll'
+        new_sopath = fullfile(binarypath, 'lsl.dll');
+    else
+        new_sopath = fullfile('/usr/lib/', so_fname);
+    end
+    if exist(new_sopath, 'file')
+        lsl_fname = new_sopath;
     end %if
 end %if
 
 if ~exist(lsl_fname,'file')
-    error(['Apparently the file "' dllpath '" is missing on your computer. Cannot load the lab streaming layer.']);
+    disp(['Could not locate the file "' so_fname '" on your computer. Attempting to download...']);
+    LIBLSL_TAG = 'v1.14.0b1';
+    LIBLSL_VER = '1.14.0';
+    liblsl_url = ['https://github.com/sccn/liblsl/releases/download/' LIBLSL_TAG '/'];
+    if ispc
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win' bitness '.zip'];
+    elseif ismac
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-OSX64.tar.bz2'];
+        
+    elseif isunix
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Linux64-bionic.deb'];
+    end
+    try
+        websave(fullfile(binarypath, liblsl_url_fname),...
+            [liblsl_url liblsl_url_fname]);
+    catch ME
+        disp(['Unable to download ' liblsl_url]);
+        rethrow(ME);
+    end
+    if ispc
+        unzip(fullfile(binarypath, liblsl_url_fname),...
+            fullfile(binarypath, 'liblsl_archive'));
+        lsl_fname = fullfile(binarypath, 'lsl.dll');
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'bin', 'lsl.dll'), lsl_fname);
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'lib', 'lsl.lib'),...
+            fullfile(binarypath, 'lsl.lib'));
+    elseif ismac
+        untar(fullfile(binarypath, liblsl_url_fname),...
+            fullfile(binarypath, 'liblsl_archive'));
+        error('TODO: copyfile from liblsl_archive to lsl_fname on mac.');
+    elseif isunix
+        error(['Automatic extraction of debian package not yet supported.', ...
+            ' Please install manually: ' fullfile(binarypath, liblsl_url_fname)]);
+    end
 end
 
 end

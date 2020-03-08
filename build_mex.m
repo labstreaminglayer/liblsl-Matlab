@@ -2,21 +2,28 @@
 % For Octave on Linux, you need the package liboctave-dev installed
 % You also need the liblsl64 binary in the bin folder and a configured
 % C compiler (mex -setup)
-
-libs = {'-llsl64'};
-if isunix
+binarypath = fullfile(fileparts(mfilename('fullpath')), 'bin');
+if ispc
+    if exist(fullfile(binarypath, 'liblsl64.lib'), 'file')
+        libs = {'-llsl64'};
+    elseif exist(fullfile(binarypath, 'lsl.lib'), 'file')
+        libs = {'-llsl'};
+    else
+        error('Neither liblsl64.lib nor lsl.lib found in bin/');
+    end
+elseif isunix
 	libs = {'-llsl64','-ldl'};
-end
-
-
-if ispc && isempty(dir('bin/liblsl64.lib'))
-	error('liblsl64.lib not found in bin/');
+else
+    libs = {'-llsl64'};
 end
 
 ext = ['.' mexext];
 
 files = dir('mex/*.c');
-cd('bin');
+
+orig_path = pwd();
+disp('Building mex files. This may take a few minutes.');
+cd(binarypath);
 for i = 1:length(files)
     f = files(i);
 	[~, base, ~] = fileparts(f.name);
@@ -30,4 +37,4 @@ end
 if ismac
     system('install_name_tool -add_rpath "@loader_path/" lsl_loadlib_.mexmaci64')
 end
-cd('..');
+cd(orig_path);

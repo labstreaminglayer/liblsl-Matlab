@@ -43,7 +43,9 @@ else
     try
         hlib = lsl_loadlib_(dllpath);
     catch e
-	disp('See https://github.com/labstreaminglayer/liblsl-Matlab/#troubleshooting for troubleshooting tips');
+        disp('This error is probably because lsl_loadlib_ mex file is not on the path.');
+        disp('Try running build_mex.m. If that was successful, make sure the liblsl-Matlab/bin folder is added to the path.');
+        disp('See https://github.com/labstreaminglayer/liblsl-Matlab/#troubleshooting for further troubleshooting tips');
         error(['Error loading the liblsl library: ', e.message]);
     end
 
