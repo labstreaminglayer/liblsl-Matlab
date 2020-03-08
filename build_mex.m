@@ -11,6 +11,12 @@ if ispc
     else
         error('Neither liblsl64.lib nor lsl.lib found in bin/');
     end
+elseif ismac
+    if exist(fullfile(binarypath, 'liblsl64.dylib'), 'file')
+        libs = {'-llsl64'};
+    elseif exist(fullfile(binarypath, 'liblsl.dylib'), 'file')
+        libs = {'-llsl'};
+    end    
 elseif isunix
 	libs = {'-llsl64','-ldl'};
 else

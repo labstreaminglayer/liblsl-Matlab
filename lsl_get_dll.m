@@ -45,8 +45,9 @@ lsl_fname = fullfile(binarypath, so_fname);
 
 if ~exist(lsl_fname, 'file')
     if ispc
-        % On Windows, also try simply 'lsl.dll'
         new_sopath = fullfile(binarypath, 'lsl.dll');
+    elseif ismac && exist(fullfile(binarypath, 'liblsl.dylib'), 'file')
+        new_sopath = fullfile(binarypath, 'liblsl.dylib');
     else
         new_sopath = fullfile('/usr/lib/', so_fname);
     end
@@ -83,9 +84,13 @@ if ~exist(lsl_fname,'file')
         copyfile(fullfile(binarypath, 'liblsl_archive', 'lib', 'lsl.lib'),...
             fullfile(binarypath, 'lsl.lib'));
     elseif ismac
-        untar(fullfile(binarypath, liblsl_url_fname),...
-            fullfile(binarypath, 'liblsl_archive'));
-        error('TODO: copyfile from liblsl_archive to lsl_fname on mac.');
+        % Use system tar because Matlab untar does not preserve symlinks.
+        mkdir(fullfile(binarypath, 'liblsl_archive'));
+        system(['tar -C ' fullfile(binarypath, 'liblsl_archive') ' -xf ' fullfile(binarypath, liblsl_url_fname)]);
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'lib', '*.dylib'), binarypath);
+        dylib_list = dir(fullfile(binarypath, '*.dylib'));
+        [~, lib_ix] = min(cellfun(@length, {dylib_list.name}));
+        lsl_fname = fullfile(dylib_list(lib_ix).folder, dylib_list(lib_ix).name);
     elseif isunix
         error(['Automatic extraction of debian package not yet supported.', ...
             ' Please install manually: ' fullfile(binarypath, liblsl_url_fname)]);
