@@ -48,6 +48,8 @@ if ~exist(lsl_fname, 'file')
         new_sopath = fullfile(binarypath, 'lsl.dll');
     elseif ismac && exist(fullfile(binarypath, 'liblsl.dylib'), 'file')
         new_sopath = fullfile(binarypath, 'liblsl.dylib');
+    elseif exist('/usr/lib/liblsl.so', 'file')
+        new_sopath = fullfile('/usr/lib/liblsl.so');
     else
         new_sopath = fullfile('/usr/lib/', so_fname);
     end
@@ -92,8 +94,8 @@ if ~exist(lsl_fname,'file')
         [~, lib_ix] = min(cellfun(@length, {dylib_list.name}));
         lsl_fname = fullfile(dylib_list(lib_ix).folder, dylib_list(lib_ix).name);
     elseif isunix
-        error(['Automatic extraction of debian package not yet supported.', ...
-            ' Please install manually: ' fullfile(binarypath, liblsl_url_fname)]);
+        error(['liblsl debian package must be installed manually:', ...
+            ' sudo dpkg -i ' fullfile(binarypath, liblsl_url_fname)]);
     end
 end
 
