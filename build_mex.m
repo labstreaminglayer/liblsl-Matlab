@@ -21,6 +21,7 @@ files = dir('mex/*.c');
 
 orig_path = pwd();
 disp('Building mex files. This may take a few minutes.');
+binarypath = fullfile(fileparts(mfilename('fullpath')), 'bin');
 cd(binarypath);
 for i = 1:length(files)
     f = files(i);
