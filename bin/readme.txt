@@ -1,1 +1,2 @@
-Please make sure that you have the most recent binaries from liblsl/bin/ in here.
+This folder should contain a recent version of the liblsl binary as well as the built mex files.
+See the parent folder's README.md for details.
