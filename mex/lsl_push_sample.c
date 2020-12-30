@@ -1,4 +1,5 @@
 #include "lsl_common.h"
+#include <strings.h>
 
 /* function lsl_push_sample(LibHandle, Outlet, SampleData [,Timestamp] [,Pushthrough]) */
 

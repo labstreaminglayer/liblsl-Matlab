@@ -1,4 +1,5 @@
 #include "lsl_common.h"
+#include <strings.h>
 
 /* function [ChunkData,Timestamps] = lsl_pull_chunk_d(LibHandle,Inlet,NumChannels) */
 

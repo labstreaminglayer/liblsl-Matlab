@@ -1,4 +1,5 @@
 #include "lsl_common.h"
+#include <strings.h>
 
 /* function [SampleData,Timestamp] = lsl_pull_sample_buf(LibHandle,Inlet,NumChannels,Timeout) */
 
