@@ -60,16 +60,21 @@ end %if
 
 if ~exist(lsl_fname,'file')
     disp(['Could not locate the file "' so_fname '" on your computer. Attempting to download...']);
-    LIBLSL_TAG = 'v1.14.0b1';
+    LIBLSL_TAG = 'v1.14.0';
     LIBLSL_VER = '1.14.0';
     liblsl_url = ['https://github.com/sccn/liblsl/releases/download/' LIBLSL_TAG '/'];
     if ispc
-        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win' bitness '.zip'];
+        if strcmpi(bitness, '64')
+            arch_suffix = '_amd64';
+        else
+            arch_suffix = '_i386';
+        end
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win' arch_suffix '.zip'];
     elseif ismac
-        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-OSX64.tar.bz2'];
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-OSX_amd64.tar.bz2'];
         
     elseif isunix
-        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Linux64-bionic.deb'];
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-focal_amd64.deb'];
     end
     try
         websave(fullfile(binarypath, liblsl_url_fname),...
