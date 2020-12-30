@@ -1,4 +1,4 @@
-function lsl_fname = lsl_get_dll(binarypath, debugging)
+function [lsl_fname, lsl_include_dir] = lsl_get_dll(binarypath, debugging)
 % Search for the lsl library
 % [lsl_fname] = lsl_get_dll(binarypath, debugging)
 %
@@ -11,27 +11,25 @@ function lsl_fname = lsl_get_dll(binarypath, debugging)
 % Out:
 %   lsl_fname : the filename of the library
 
+script_dir = fileparts(mfilename('fullpath'));
 if ~exist('binarypath','var') || isempty(binarypath)
-    binarypath = fullfile(fileparts(mfilename('fullpath')), 'bin');
+    binarypath = fullfile(script_dir, 'bin');
 end
 if ~exist('debugging','var') || isempty(debugging)
     debugging = false;
 end
 
 if ispc
+    prefix = '';
     ext = '.dll';
 elseif ismac
+    prefix = 'lib';
     ext = '.dylib';
 elseif isunix
+    prefix = 'lib';
     ext = '.so';
 else
-    error('Your operating system is not supported by this version of the lab streaming layer API.');
-end
-
-if contains(computer,'64')
-    bitness = '64';
-else
-    bitness = '32';
+    error('Operating system not recognized. Cannot identify liblsl binaries.');
 end
 
 if debugging
@@ -40,22 +38,25 @@ else
     debug = '';
 end
 
-so_fname = sprintf('liblsl%s%s%s', bitness, debug, ext);
-lsl_fname = fullfile(binarypath, so_fname);
+so_fname = sprintf('%slsl%s%s', prefix, debug, ext);
 
+% First check ./bin/ for the shared object.
+% Then check the sister liblsl/build/install/bin folder.
+% Finally, check other platform-dependent locations.
+lsl_fname = fullfile(binarypath, so_fname);
 if ~exist(lsl_fname, 'file')
-    if ispc
-        new_sopath = fullfile(binarypath, 'lsl.dll');
-    elseif ismac && exist(fullfile(binarypath, 'liblsl.dylib'), 'file')
-        new_sopath = fullfile(binarypath, 'liblsl.dylib');
-    elseif exist('/usr/lib/liblsl.so', 'file')
-        new_sopath = fullfile('/usr/lib/liblsl.so');
-    else
-        new_sopath = fullfile('/usr/lib/', so_fname);
+    if exist(fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname), 'file')
+        lsl_fname = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname);
+        lsl_include_dir = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'include');
+    elseif ispc
+        % TODO: Anywhere else to check on PC?
+    elseif ismac
+        % TODO: After liblsl gets a homebrew distribution, check there.
+    elseif exist(fullfile('/usr/lib', so_fname), 'file')
+        % Linux: Check /usr/lib
+        lsl_fname = fullfile('/usr/lib', so_fname);
+        lsl_include_dir = '/usr/include';
     end
-    if exist(new_sopath, 'file')
-        lsl_fname = new_sopath;
-    end %if
 end %if
 
 if ~exist(lsl_fname,'file')
@@ -70,13 +71,24 @@ if ~exist(lsl_fname,'file')
     elseif ismac
         liblsl_url_fname = ['liblsl-' LIBLSL_VER '-OSX_amd64.tar.bz2'];
     elseif isunix
-        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-focal_amd64.deb'];
+        % Check (xenial vs) bionic vs focal
+        filetext = fileread('/etc/lsb-release');
+        expr = '[^\n]*DISTRIB_CODENAME=(?<code>\w+)[^\n]*';
+        res = regexp(filetext,expr,'names');
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-' res.code '_amd64.deb'];
     end
     try
         websave(fullfile(binarypath, liblsl_url_fname),...
             [liblsl_url liblsl_url_fname]);
     catch ME
-        disp(['Unable to download ' liblsl_url]);
+        disp(['Unable to download ' liblsl_url liblsl_url_fname]);
+        if isunix
+            extra_step = 'install it';
+        else
+            extra_step = ['extract it to ' fullfile(binarypath, 'liblsl_archive')];
+        end
+        disp(['You will have to manually download a liblsl release from https://github.com/sccn/liblsl/releases and ' extra_step ...
+            ' or build liblsl yourself, before reattempting to build the mex files.']);
         rethrow(ME);
     end
     if ispc
@@ -86,6 +98,9 @@ if ~exist(lsl_fname,'file')
         copyfile(fullfile(binarypath, 'liblsl_archive', 'bin', 'lsl.dll'), lsl_fname);
         copyfile(fullfile(binarypath, 'liblsl_archive', 'lib', 'lsl.lib'),...
             fullfile(binarypath, 'lsl.lib'));
+        lsl_include_dir = fullfile(binarypath, 'include');
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'include'), lsl_include_dir);
+        rmdir(fullfile(binarypath, 'liblsl_archive'));
     elseif ismac
         % Use system tar because Matlab untar does not preserve symlinks.
         mkdir(fullfile(binarypath, 'liblsl_archive'));
@@ -94,11 +109,11 @@ if ~exist(lsl_fname,'file')
         dylib_list = dir(fullfile(binarypath, '*.dylib'));
         [~, lib_ix] = min(cellfun(@length, {dylib_list.name}));
         lsl_fname = fullfile(dylib_list(lib_ix).folder, dylib_list(lib_ix).name);
+        lsl_include_dir = fullfile(binarypath, 'include');
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'include'), lsl_include_dir);
+        rmdir(fullfile(binarypath, 'liblsl_archive'));
     elseif isunix
-        error(['liblsl debian package must be installed manually:', ...
+        error(['Reattempt build after manual installation of liblsl debian package:', ...
             ' sudo dpkg -i ' fullfile(binarypath, liblsl_url_fname)]);
     end
 end
-
-end
-

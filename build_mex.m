@@ -9,7 +9,7 @@ script_dir = fileparts(mfilename('fullpath'));
 files = dir('mex/*.c');
 
 % Find liblsl, possibly downloading it if it can't be found locally.
-lsl_fname = lsl_get_dll();
+[lsl_fname, lsl_include_dir] = lsl_get_dll();
 
 % Build cell array of libray dependencies (liblsl and maybe others)
 libs = {};
@@ -24,14 +24,6 @@ if isunix
     libs{end+1} = '-ldl';
 end
 
-% Find liblsl headers. If liblsl was downloaded above then check there.
-%  Otherwise assume they are in a sister directory.
-if exist(fullfile(script_dir, 'bin', 'liblsl_archive', 'include'), 'dir')
-    incl_dir = fullfile(script_dir, 'bin', 'liblsl_archive', 'include');
-else
-    incl_dir = fullfile(script_dir, '..', 'liblsl', 'include');
-end
-
 disp('Building mex files. This may take a few minutes.');
 binarypath = fullfile(script_dir, 'bin');
 cd(binarypath);
@@ -40,7 +32,7 @@ for i = 1:length(files)
 	[~, base, ~] = fileparts(f.name);
 	targetstats = dir([base, ext]);
 	if isempty(targetstats) || f.datenum > targetstats.datenum
-		mex(['-I', incl_dir], '-L.', libs{:}, ['../mex/', f.name]);
+		mex(['-I', lsl_include_dir], '-L.', libs{:}, ['../mex/', f.name]);
 	else
 		disp([base, ext, ' up to date']);
 	end
