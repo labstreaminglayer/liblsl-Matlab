@@ -44,7 +44,8 @@ so_fname = sprintf('%slsl%s%s', prefix, debug, ext);
 % Then check the sister liblsl/build/install/bin folder.
 % Finally, check other platform-dependent locations.
 lsl_fname = fullfile(binarypath, so_fname);
-if ~exist(lsl_fname, 'file')
+lsl_include_dir = fullfile(binarypath, 'include');
+if ~exist(lsl_fname, 'file') || ~exist(lsl_include_dir, 'dir')
     if exist(fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname), 'file')
         lsl_fname = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname);
         lsl_include_dir = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'include');
@@ -59,7 +60,10 @@ if ~exist(lsl_fname, 'file')
     end
 end %if
 
-if ~exist(lsl_fname,'file')
+% If liblsl (with headers) could not be found in the default paths,
+%  then attempt to download it. On Unix, this will have to be installed
+%  manually. On PC and Mac, this will be extracted then cleaned up.
+if ~exist(lsl_fname,'file') || ~exist(lsl_include_dir, 'dir')
     disp(['Could not locate the file "' so_fname '" on your computer. Attempting to download...']);
     LIBLSL_TAG = 'v1.14.0';
     LIBLSL_VER = '1.14.0';
@@ -98,9 +102,6 @@ if ~exist(lsl_fname,'file')
         copyfile(fullfile(binarypath, 'liblsl_archive', 'bin', 'lsl.dll'), lsl_fname);
         copyfile(fullfile(binarypath, 'liblsl_archive', 'lib', 'lsl.lib'),...
             fullfile(binarypath, 'lsl.lib'));
-        lsl_include_dir = fullfile(binarypath, 'include');
-        copyfile(fullfile(binarypath, 'liblsl_archive', 'include'), lsl_include_dir);
-        rmdir(fullfile(binarypath, 'liblsl_archive'));
     elseif ismac
         % Use system tar because Matlab untar does not preserve symlinks.
         mkdir(fullfile(binarypath, 'liblsl_archive'));
@@ -109,11 +110,14 @@ if ~exist(lsl_fname,'file')
         dylib_list = dir(fullfile(binarypath, '*.dylib'));
         [~, lib_ix] = min(cellfun(@length, {dylib_list.name}));
         lsl_fname = fullfile(dylib_list(lib_ix).folder, dylib_list(lib_ix).name);
-        lsl_include_dir = fullfile(binarypath, 'include');
-        copyfile(fullfile(binarypath, 'liblsl_archive', 'include'), lsl_include_dir);
-        rmdir(fullfile(binarypath, 'liblsl_archive'));
     elseif isunix
         error(['Reattempt build after manual installation of liblsl debian package:', ...
             ' sudo dpkg -i ' fullfile(binarypath, liblsl_url_fname)]);
+    end
+    % Grab include_dir and Cleanup no-longer-needed downloaded files.
+    if ispc || ismac
+        copyfile(fullfile(binarypath, 'liblsl_archive', 'include'), lsl_include_dir);
+        rmdir(fullfile(binarypath, 'liblsl_archive'), 's');
+        delete(fullfile(binarypath, liblsl_url_fname));
     end
 end
