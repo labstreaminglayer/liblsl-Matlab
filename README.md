@@ -27,7 +27,7 @@ Instead, you can download the source, the dependencies, and build yourself. This
 
 ## How to Use
 
-1. Add this folder to your MATLAB path recursively
+1. Add the liblsl-Matlab folder to your MATLAB path recursively
     * Using the MATLAB GUI, use File/Set Path...
     * Alternatively, in a script, use `addpath(genpath('path/to/liblsl-Matlab'));`
 2. Load the library then call a function.

@@ -63,16 +63,12 @@ if ~exist(lsl_fname,'file')
     LIBLSL_TAG = 'v1.14.0';
     LIBLSL_VER = '1.14.0';
     liblsl_url = ['https://github.com/sccn/liblsl/releases/download/' LIBLSL_TAG '/'];
-    if ispc
-        if strcmpi(bitness, '64')
-            arch_suffix = '_amd64';
-        else
-            arch_suffix = '_i386';
-        end
-        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win' arch_suffix '.zip'];
+    if ispc && contains(computer,'64')
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win_amd64.zip'];
+    elseif ispc
+        liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win_i386.zip'];
     elseif ismac
         liblsl_url_fname = ['liblsl-' LIBLSL_VER '-OSX_amd64.tar.bz2'];
-        
     elseif isunix
         liblsl_url_fname = ['liblsl-' LIBLSL_VER '-focal_amd64.deb'];
     end
