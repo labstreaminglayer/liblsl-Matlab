@@ -65,8 +65,8 @@ end %if
 %  manually. On PC and Mac, this will be extracted then cleaned up.
 if ~exist(lsl_fname,'file') || ~exist(lsl_include_dir, 'dir')
     disp(['Could not locate the file "' so_fname '" on your computer. Attempting to download...']);
-    LIBLSL_TAG = 'v1.14.0';
-    LIBLSL_VER = '1.14.0';
+    LIBLSL_TAG = 'v1.16.0';
+    LIBLSL_VER = '1.16.0';
     liblsl_url = ['https://github.com/sccn/liblsl/releases/download/' LIBLSL_TAG '/'];
     if ispc && contains(computer,'64')
         liblsl_url_fname = ['liblsl-' LIBLSL_VER '-Win_amd64.zip'];
