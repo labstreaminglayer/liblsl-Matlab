@@ -52,7 +52,9 @@ if ~exist(lsl_fname, 'file') || ~exist(lsl_include_dir, 'dir')
     elseif ispc
         % TODO: Anywhere else to check on PC?
     elseif ismac
-        % TODO: After liblsl gets a homebrew distribution, check there.
+        % Check homebrew
+        lsl_fname = fullfile('/opt/homebrew/lib', so_fname);
+        lsl_include_dir = '/opt/homebrew/include';
     elseif exist(fullfile('/usr/lib', so_fname), 'file')
         % Linux: Check /usr/lib
         lsl_fname = fullfile('/usr/lib', so_fname);
