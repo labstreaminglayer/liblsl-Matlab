@@ -12,10 +12,10 @@ Instead, you can download the source, the dependencies, and build yourself. This
 
 1. Clone or download a zip of this repository from https://github.com/labstreaminglayer/liblsl-Matlab
     * If you downloaded the zip, extract it somewhere convenient.
-2. Add an up-to-date build of the liblsl binary to the `liblsl-Matlab/bin/` directory.
+2. Ensure you have an up-to-date build of the liblsl library binary available.
     * Option 1: Do nothing and it will download automatically when first required.
         * This might fail, or even if it succeeds in downloading the file, you might still get errors trying to load the library. Try Option 2 next.
-    * Option 2: Download precompiled libraries from the [liblsl release page](https://github.com/sccn/liblsl/releases)
+    * Option 2: Download precompiled libraries from the [liblsl release page](https://github.com/sccn/liblsl/releases) and place it in the `liblsl-Matlab/bin` folder.
         * See [here](https://labstreaminglayer.readthedocs.io/info/faqs.html#binaries) for more information about which library you need.
         * This doesn't always work, unfortunately. Try option 3.
     * Option 3: Build it yourself.

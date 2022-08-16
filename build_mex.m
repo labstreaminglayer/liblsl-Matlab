@@ -32,13 +32,15 @@ for i = 1:length(files)
 	[~, base, ~] = fileparts(f.name);
 	targetstats = dir([base, ext]);
 	if isempty(targetstats) || f.datenum > targetstats.datenum
-		mex(['-I', lsl_include_dir], '-L.', libs{:}, ['../mex/', f.name]);
+		mex(['-I', lsl_include_dir], '-L.', ['-L', fileparts(lsl_fname)], ...
+            libs{:}, ['../mex/', f.name]);
 	else
 		disp([base, ext, ' up to date']);
 	end
 end
 if ismac
-    system('install_name_tool -add_rpath "@loader_path/" lsl_loadlib_.mexmaci64')
+    targ_lib = dir('lsl_loadlib_.mexmac*');
+    system(['install_name_tool -add_rpath "@loader_path/" ', targ_lib.name]);
 end
 
 cd(orig_path);
