@@ -34,6 +34,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     other = (xml_ptr)*(uintptr_t*)mxGetData(prhs[2]);
     
     /* invoke & return */
-    out = func(in,other);
+    out = func((xml_ptr)in,other);
     plhs[0] = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(plhs[0]) = (uintptr_t)out;
 }

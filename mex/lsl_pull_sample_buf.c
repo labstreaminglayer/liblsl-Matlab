@@ -49,7 +49,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         mexErrMsgTxt("The timeout argument must be passed as a double.");
     timeout = *(double*)mxGetData(prhs[3]);
     
-    timestamp = func(in,buffer,lengths,numchannels,timeout,&errcode);
+    timestamp = func((xml_ptr)in,buffer,lengths,numchannels,timeout,&errcode);
     if (errcode) {
         if (errcode == lsl_timeout_error)
             mexErrMsgIdAndTxt("lsl:timeout_error","The operation timed out.");

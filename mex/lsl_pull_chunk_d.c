@@ -70,7 +70,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         (*cur)->buffer = malloc(numchannels*sizeof(double));
         (*cur)->next = 0;
         /* retrieve sample */
-        (*cur)->timestamp = func(in,(*cur)->buffer,numchannels,timeout,&errcode);
+        (*cur)->timestamp = func((xml_ptr)in,(*cur)->buffer,numchannels,timeout,&errcode);
         if (errcode)
             break;
         if ((*cur)->timestamp == 0.0)

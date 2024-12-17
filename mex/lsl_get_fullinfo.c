@@ -15,7 +15,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     uintptr_t in;
     double timeout;
     streaminfo result;
-    int errcode;
+    int errcode = 0;
     
     if (nrhs != 3)
         mexErrMsgTxt("3 input argument(s) required."); 
@@ -39,7 +39,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     timeout = *(double*)mxGetData(prhs[2]);
     
     /* invoke & return */
-    result = func(in,timeout,&errcode);
+    result = func((xml_ptr)in,timeout,&errcode);
     if (errcode) {
         if (errcode == lsl_timeout_error)
             mexErrMsgIdAndTxt("lsl:timeout_error","The operation timed out.");
@@ -47,6 +47,9 @@ void mexFunction( int nlhs, mxArray *plhs[],
             mexErrMsgIdAndTxt("lsl:lost_error","The stream has been lost.");
         if (errcode == lsl_internal_error)
             mexErrMsgIdAndTxt("lsl:internal_error","An internal error occurred.");
+
+        // print the error code using 
+        mexPrintf("Error code: %d\n",errcode);
         mexErrMsgIdAndTxt("lsl:unknown_error","An unknown error occurred.");
     }
     plhs[0] = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(plhs[0]) = (uintptr_t)result;

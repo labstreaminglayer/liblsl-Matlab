@@ -38,5 +38,5 @@ void mexFunction( int nlhs, mxArray *plhs[],
     mxGetString(prhs[2], str, str_len+1);
     
     /* invoke & return */
-    func(in,str);    
+    func((xml_ptr)in,str);    
 }

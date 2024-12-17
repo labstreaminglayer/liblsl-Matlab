@@ -37,7 +37,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     timeout = *(double*)mxGetData(prhs[2]);
     
     /* invoke & return */
-    func(in,timeout,&errcode);
+    func((xml_ptr)in,timeout,&errcode);
     
     if (errcode) {
         if (errcode == lsl_timeout_error)

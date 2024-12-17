@@ -35,7 +35,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     /* get additional inputs */
     if (mxGetClassID(prhs[1]) != PTR_CLASS)
         mexErrMsgTxt("The streaminfo must be a pointer.");
-    info = (uintptr_t)(*(uintptr_t*)mxGetData(prhs[1]));
+    info = (streaminfo)(uintptr_t)(*(uintptr_t*)mxGetData(prhs[1]));
 
     if (mxGetClassID(prhs[2]) != mxDOUBLE_CLASS)
         mexErrMsgTxt("The chunk size must be passed as a double.");
@@ -46,6 +46,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     max_buffered = (int)(*(double*)mxGetData(prhs[3]));
 
     /* invoke & return */
-    result = func(info,chunk_size,max_buffered);
+    result = func((xml_ptr)info,chunk_size,max_buffered);
     plhs[0] = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *((uintptr_t*)mxGetData(plhs[0])) = (uintptr_t)result;
 }

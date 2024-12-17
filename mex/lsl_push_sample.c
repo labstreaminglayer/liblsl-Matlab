@@ -30,7 +30,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
         mexErrMsgTxt("0 output argument(s) required.");
         
     /* get outlet ptr */
-    out = *(uintptr_t*)mxGetData(prhs[1]);
+    out = (outlet)*(uintptr_t*)mxGetData(prhs[1]);
     
     if (nrhs >= 4) {
         /* read timestamp value */

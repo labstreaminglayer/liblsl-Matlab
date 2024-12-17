@@ -33,6 +33,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     info = *(uintptr_t*)mxGetData(prhs[1]);
     
     /* invoke & return */
-    channel_format = func(info);
+    channel_format = func((xml_ptr)info);
     plhs[0] = mxCreateNumericMatrix(1,1,mxDOUBLE_CLASS,mxREAL); *(double*)mxGetData(plhs[0]) = (double)channel_format;
 }

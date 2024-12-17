@@ -33,6 +33,6 @@ void mexFunction( int nlhs, mxArray *plhs[],
     info = *(uintptr_t*)mxGetData(prhs[1]);
     
     /* invoke & return */
-    type = func(info);
+    type = func((xml_ptr)info);
     plhs[0] = mxCreateString(type);
 }
