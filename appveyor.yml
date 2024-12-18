@@ -10,7 +10,7 @@ environment:
 install:
 - cmd: >-
 
-    appveyor DownloadFile https://github.com/sccn/liblsl/releases/download/%LSLTAG%/liblsl-%LSLVERSION%-Win64.zip -FileName liblsl.zip
+    appveyor DownloadFile https://github.com/sccn/liblsl/releases/download/%LSLTAG%/liblsl-%LSLVERSION%-Win_amd64.zip -FileName liblsl.zip
 
     7z x liblsl.zip
 
