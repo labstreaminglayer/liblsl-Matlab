@@ -14,9 +14,9 @@
     },
 
     "version": {
-        "name": "1.12",
+        "name": "1.16",
         "desc": "Matlab bindings for liblsl",
-        "released": "2018-05-02",
+        "released": "2024-12-17",
         "vcs_tag": "",
         "gpgSign": false
     },
