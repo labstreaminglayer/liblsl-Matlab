@@ -1,8 +1,8 @@
 language: c
 env:
   LSLDIST_URL="https://dl.bintray.com/labstreaminglayer/LSL/"
-  UBUNTU_DIST="trusty"
-  LSL_VERSION="1.1.2"
+  UBUNTU_DIST="jammy"
+  LSL_VERSION="1.16.2"
   - CMakeArgs=""
 script:
 - cp ${LSL_INSTALL_ROOT}/lib/* bin/
