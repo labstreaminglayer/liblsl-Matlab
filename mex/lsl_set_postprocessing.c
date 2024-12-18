@@ -13,7 +13,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     lsl_set_postprocessing_t func;
     /* input/output variables */
     uintptr_t in;
-    processing_options_t proc_flag;
+    int proc_flag;
     
     if (nrhs != 3)
         mexErrMsgTxt("3 input argument(s) required."); 
@@ -34,6 +34,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     if (mxGetClassID(prhs[2]) != mxDOUBLE_CLASS)
         mexErrMsgTxt("The processing flag must be passed as a double.");
     proc_flag = (int)*(double*)mxGetData(prhs[2]);
+    
     /* invoke & return */
-    func(in, proc_flag);
+    func((xml_ptr)in, proc_flag);
 }

@@ -27,13 +27,13 @@ void mexFunction( int nlhs, mxArray *plhs[],
     pTmp = (uintptr_t*)mxGetData(field);
     if (!pTmp)
         mexErrMsgTxt("The field seems to be empty.");
-    func = (lsl_append_copy_t*)*pTmp;
+    func = (lsl_append_copy_t*)(*pTmp);
     
     /* get additional inputs */
     in = (xml_ptr)*(uintptr_t*)mxGetData(prhs[1]);
     other = (xml_ptr)*(uintptr_t*)mxGetData(prhs[2]);
     
     /* invoke & return */
-    out = func(in,other);
+    out = (xml_ptr)func(in,other);
     plhs[0] = mxCreateNumericMatrix(1,1,PTR_CLASS,mxREAL); *(uintptr_t*)mxGetData(plhs[0]) = (uintptr_t)out;
 }

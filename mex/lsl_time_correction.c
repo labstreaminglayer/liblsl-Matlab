@@ -39,7 +39,7 @@ void mexFunction( int nlhs, mxArray *plhs[],
     timeout = *(double*)mxGetData(prhs[2]);
     
     /* invoke & return */
-    result = func(in,timeout,&errcode);
+    result = func((xml_ptr)in,timeout,&errcode);
     if (errcode) {
         if (errcode == lsl_timeout_error)
             mexErrMsgIdAndTxt("lsl:timeout_error","The operation timed out.");
