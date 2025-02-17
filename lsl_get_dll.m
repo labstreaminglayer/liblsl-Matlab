@@ -49,6 +49,12 @@ if ~exist(lsl_fname, 'file') || ~exist(lsl_include_dir, 'dir')
     if exist(fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname), 'file')
         lsl_fname = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'bin', so_fname);
         lsl_include_dir = fullfile(script_dir, '..', 'liblsl', 'build', 'install', 'include');
+    elseif exist(fullfile(script_dir, 'bin', so_fname), 'file')
+        lsl_fname = fullfile(script_dir, 'bin', so_fname);
+        lsl_include_dir = fullfile(script_dir, 'bin');
+    elseif exist(fullfile(script_dir, so_fname), 'file')
+        lsl_fname = fullfile(script_dir, so_fname);
+        lsl_include_dir = fullfile(script_dir);
     elseif ispc
         % TODO: Anywhere else to check on PC?
     elseif ismac
